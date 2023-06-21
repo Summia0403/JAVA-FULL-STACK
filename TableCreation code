@@ -1,0 +1,48 @@
+package edu.sece.cse1;
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+import java.sql.Statement;
+
+public class TableCreation {
+	//Establish Connection
+	private static final String URL = "jdbc:mysql://localhost:3306/secedb";
+    private static final String USERNAME = "root";
+    private static final String PASSWORD = "Sumsharid@0403";
+    private static Connection con = null;
+
+    public static void main(String[] args) throws Exception {
+           	
+    	//Create Table
+    	//String sql_query="create table employees(eno int,ename varchar(10),esal int,eaddr varchar(10))";
+      
+    	//Delete table
+    	String sql_query="drop table employees";
+    	
+    	con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+	if(con!=null)
+	
+		System.out.println("Connection Established....");
+		else
+			System.out.println("Connection Failed!!");
+	
+	//Create the Statement Object
+	Statement st=con.createStatement();
+	
+	//Execute Query
+	int res=st.executeUpdate(sql_query);
+	if (res==0)
+		//Create Table
+		//System.out.println("Table created sucessfully.....");
+	//Delete table
+	System.out.println("Table deleted sucessfully.....");
+	//st.executeUpdate(sql_query);
+	
+	//Close Connections
+	st.close();
+	con.close();
+	
+	
+
+}
+}
