@@ -1,0 +1,106 @@
+package com.test;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.Scanner;
+
+
+public class EmployeeData {
+
+
+		private static final String URL = "jdbc:mysql://localhost:3306/mydb";
+	    private static final String USERNAME = "root";
+	    private static final String PASSWORD = "Sumsharid@0403";
+	    private static Connection con = null;
+
+	    public static void main(String[] args) throws Exception {
+	    	Scanner scanner = new Scanner(System.in);
+	    	//Create Table
+	    	//String sql_query="create table employee_data(eno int  NOT NULL AUTO_INCREMENT primary key,ename varchar(10),esal int)";
+	        	  	
+	    	con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+		if(con!=null)
+		
+			System.out.println("Connection Established....");
+			else
+				System.out.println("Connection Failed!!");
+		
+		//Create the Statement Object
+	/*	Statement st=con.createStatement();
+			//Execute Query
+		int res=st.executeUpdate(sql_query);
+		if (res==0)
+			//Create Table
+			System.out.println("Table created sucessfully.....");
+			st.executeUpdate(sql_query);*/
+			 while (true) {
+		            printMenu();
+		            int ch = scanner.nextInt();
+		            switch (ch) {
+		                case 1:
+		                    Insert(scanner);
+		                    break;
+		                case 2:
+		                	Display();
+			                break;
+		                case 3:
+		                    Filter(scanner);
+		                    break;
+		                case 4:
+		                    System.out.println("\n\t\tExit operation");
+		                    System.exit(1);
+	//Close Connections
+		//st.close();
+		//con.close();
+	}
+	}
+	}
+
+		private static void printMenu() 
+			 {
+			        System.out.println("\n\t\tEmployee Databse");
+			        System.out.println("\n\t\t1.Insert");
+			        System.out.println("\n\t\t2.Display");
+			        System.out.println("\n\t\t3.Filter");
+			        System.out.println("\n\t\t4.Exit");
+			        System.out.println("\n\t\tEnter Your Choice(1/2/3/4)");
+			    }
+		 private static void Insert(Scanner scanner) throws Exception 
+		 {
+		                System.out.println("\n\t\tInsert Employee Data");
+		                System.out.println("\n\t\tEnter Name=");
+		                String name = scanner.next();
+		                System.out.println("\n\t\tEnter Salary=");
+		                int sal = scanner.nextInt();
+		                PreparedStatement ps1 = con.prepareStatement("INSERT INTO employee_data (ename, esal) VALUES (?, ?)");
+		                ps1.setString(1, name);
+		                ps1.setInt(2, sal);
+		                ps1.execute();
+		  }
+		   private static void Display() throws Exception 
+		   {
+		        System.out.println("\n\t\tDisplay Employee Data");
+		        Statement st = con.createStatement();
+		        ResultSet rs = st.executeQuery("SELECT * FROM employee_data");
+		        System.out.println("\n\tName\tSalary");
+		        while (rs.next()) {
+		            System.out.println("\n\t" + rs.getString("ename") + "\t" + rs.getInt("esal"));
+		        }
+		    }
+		   private static void Filter(Scanner scanner) throws Exception 
+		   {
+			   System.out.println("\n\t\tFilter Employee Data");
+			   System.out.println("Enter the intial character to search");
+			   String str=scanner.next()+"%";
+			   Statement st = con.createStatement();
+			   String sql_query=String.format("Select * from employee_data where ename like '%s'",str);
+			   ResultSet rs = st.executeQuery(sql_query);
+			   while (rs.next()) {
+		            System.out.println("\n\t" + rs.getString("ename") + "\t" + rs.getInt("esal"));
+		        }
+			   
+		   }
+}	   
